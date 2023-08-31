@@ -1,17 +1,11 @@
-const express = require('express');
+import { Router } from 'express';
 
-const {
-    getbootcamp,
-    bootcamp,
-    storebootcamp,
-    updatebootcamp,
-    deletebootcamp
-} = require('../controllers/bootcamps')
+import { getbootcamp, getSingleBootcamp , storebootcamp, updatebootcamp, deletebootcamp } from '../controllers/bootcamps.js';
 
-const router = express.Router();
+const router = Router();
 
 router.route('/').get(getbootcamp).post(storebootcamp);
 
-router.route('/:id').get(bootcamp).put(updatebootcamp).delete(deletebootcamp);
+router.route('/:id').get(getSingleBootcamp).put(updatebootcamp).delete(deletebootcamp);
 
-module.exports = router;
+export default router;

@@ -1,16 +1,24 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express from 'express';
+import { config } from 'dotenv';
 
+
+import morgan from 'morgan';
 //Route files
 
-const bootcamps = require('./routes/bootcamps')
+import bootcamps from './routes/bootcamps.js';
 //load env vars
-dotenv.config({ path: './config/config.env' });
+config({ path: './config/config.env' });
 
 const app = express();
 
-//mount routers
 
+// dev loggin middleware
+if(process.env.NODE_ENV=="development")
+{
+    app.use(morgan('dev'));
+}
+
+//mount routers
 app.use('/api/v1/bootcamps',bootcamps);
 
 const PORT = process.env.PORT || 5000
