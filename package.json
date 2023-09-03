@@ -4,6 +4,7 @@
   "description": "p1 api",
   "main": "index.js",
   "type": "module",
+  
   "scripts": {
     "start": "NODE_ENV=production node server",
     "dev": "nodemon server"
