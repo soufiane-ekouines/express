@@ -5,12 +5,62 @@ import { asyncHandler } from "../middleware/async.js";
 // @access public
 export const getbootcamp = async (req, res, next) => {
     let query;
-    let queryStr = JSON.stringify(req.query)
 
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+    const reqQuery = {...req.query};
+
+    const removeFields = ['select','sort','page','limit'];
+
+    removeFields.forEach(params => delete reqQuery[params]);
+
+    let queryStr = JSON.stringify(reqQuery)
+
+    //create operators like gt gte ect
+    // queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
     query = Bootcamp.find(JSON.parse(queryStr));
+
+    //select fields
+    if (req.query.select) {
+        const fields = req.query.select.split(',').join(' ')
+        query.select(fields);
+    }
+
+    //sort by
+    if (req.query.sort) {
+        const sortby = req.query.sort.split(',').join(' ')
+        query.sort(sortby);
+    }else{
+        query.sort('-createdAt');
+    }
+
+    //paginate
+    const page = parseInt(req.query.page,10)|| 1
+    const limit = parseInt(req.query.limit,10)|| 10
+    const startIndex = (page-1)*limit
+    const endIndex = page*limit;
+    const total = await Bootcamp.countDocuments();
+
+    query = query.skip(startIndex).limit(limit);
+
+    const pagination = {};
+
+    if(endIndex < total){
+        pagination.next = {
+            page :page+1,
+            limit
+        }
+    }
+
+    if(startIndex > 0){
+        pagination.prev = {
+            page :page-1,
+            limit
+        }
+    }
+
     const bootcamps = await query;
-    res.status(200).send({ success: true, count: bootcamps.length, data: bootcamps });
+
+    res.status(200).send({ success: true, count: bootcamps.length,pagination:pagination , data: bootcamps });
 }
 
 //@desc get single bootcamp
