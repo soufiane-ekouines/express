@@ -19,9 +19,15 @@ export const getcources = asyncHandler(async (req, res, next) => {
 
     //create operators like gt gte ect
     // queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-        query = Course.find(JSON.parse(queryStr));
         if (req.params.bootcampId) {
+            query = Course.find(JSON.parse(queryStr));
             query = query.where('bootcamp', req.params.bootcampId);
+          }else{
+            query = Course.find(JSON.parse(queryStr)).populate({
+                path:'bootcamp',
+                select:'name description'
+            });
+
           }
 
     if (req.query.select) {
