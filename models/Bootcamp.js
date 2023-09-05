@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
- const BootcampSheema = mongoose.Schema({
+const BootcampSheema = mongoose.Schema({
     name: {
         type: String,
         required: [true, "please add a name"],
@@ -62,37 +62,51 @@ import mongoose from "mongoose";
             "Other"
         ]
     },
-    averageRating:{
+    averageRating: {
         type: Number,
-        min:[1,"Rating Must be at least 1"],
-        max:[10,"Rating can not be more than 10"]
+        min: [1, "Rating Must be at least 1"],
+        max: [10, "Rating can not be more than 10"]
     },
-    averageCost:Number,
-    photo:{
+    averageCost: Number,
+    photo: {
         type: String,
         default: 'no_photo.jpg'
     },
-    housing:{
+    housing: {
         type: Boolean,
-        default:false
-    },  
-    jobAssistance:{
-        type: Boolean,
-        default:false
-    },  
-    jobGuarantee:{
-        type: Boolean,
-        default:false
-    },  
-    acceptGi:{
-        type: Boolean,
-        default:false
+        default: false
     },
-    createdAt:{
-        type:Date,
-        default:Date.now
+    jobAssistance: {
+        type: Boolean,
+        default: false
+    },
+    jobGuarantee: {
+        type: Boolean,
+        default: false
+    },
+    acceptGi: {
+        type: Boolean,
+        default: false
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
-    
-});
+
+},
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+}
+);
+
+
+//Reverse populate with virtuals
+BootcampSheema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'bootcamp',
+    justOne: false
+})
 
 export const Bootcamp = mongoose.model('Bootcamp', BootcampSheema);

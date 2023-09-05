@@ -18,7 +18,7 @@ export const getbootcamp = async (req, res, next) => {
     //create operators like gt gte ect
     // queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    query = Bootcamp.find(JSON.parse(queryStr));
+    query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
 
     //select fields
     if (req.query.select) {
@@ -69,7 +69,7 @@ export const getbootcamp = async (req, res, next) => {
 // @access public
 export const getSingleBootcamp = asyncHandler(async (req, res, next) => {
 
-    const bootcamps = await Bootcamp.findById(req.params.id);
+    const bootcamps = await Bootcamp.findById(req.params.id).populate('courses');
     if (!bootcamps) {
         return res.status(400).send({ success: false, data: null });
     }
