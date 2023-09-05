@@ -1,5 +1,6 @@
 import { Bootcamp } from "../models/Bootcamp.js";
 import { asyncHandler } from "../middleware/async.js";
+
 //@desc get all bootcamp
 //@route GET /api/v1/bootcamps
 // @access public
