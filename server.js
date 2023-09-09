@@ -14,6 +14,8 @@ connectDB();
 //Route files
 import bootcamps from './routes/bootcamps.js';
 import courses from './routes/courses.js';
+import users from './routes/users.js';
+
 
 
 const app = express();
@@ -31,6 +33,8 @@ if(process.env.NODE_ENV=="development")
 //mount routers
 app.use('/api/v1/bootcamps',bootcamps);
 app.use('/api/v1/courses',courses);
+app.use('/api/v1/users',users);
+
 
 
 app.use(errorHandler);

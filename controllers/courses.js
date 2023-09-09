@@ -6,7 +6,7 @@ import { asyncHandler } from "../middleware/async.js";
 //@route GET /api/v1/bootcamps/:bootcamps/courses
 
 // @access public
-export const getcources = asyncHandler(async (req, res, next) => {
+export const getcources = asyncHandler(async (req, res, next) => {  
     let query;
 
     const reqQuery = { ...req.query };
