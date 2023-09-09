@@ -100,6 +100,25 @@ const BootcampSheema = mongoose.Schema({
 }
 );
 
+// Cascade delete courses when a bootcamp is deleted
+// BootcampSheema.pre('remove', async function(next) {
+//     console.log(`Courses being removed from bootcamp ${this._id}`);
+//     await this.model('Course').deleteMany({ bootcamp: this._id });
+//     next();
+//   });
+
+// Define a pre-remove middleware for the Bootcamp schema
+BootcampSheema.pre('remove', async function (next) {
+    const bootcampId = this._id;
+  
+    try {
+      // Remove all associated courses when a bootcamp is removed
+      await Course.deleteMany({ bootcamp: bootcampId });
+      next();
+    } catch (err) {
+      next(err);
+    }
+  });
 
 //Reverse populate with virtuals
 BootcampSheema.virtual('courses', {

@@ -1,4 +1,5 @@
 import { Bootcamp } from "../models/Bootcamp.js";
+import {Course} from "../models/Course.js";
 import { asyncHandler } from "../middleware/async.js";
 
 //@desc get all bootcamp
@@ -106,11 +107,16 @@ export const updatebootcamp = asyncHandler(async (req, res, next) => {
 // @access private
 export const deletebootcamp = asyncHandler(async (req, res, next) => {
 
-    const bootcamps = await Bootcamp.findByIdAndDelete(req.params.id);
+    const bootcamps = await Bootcamp.findById(req.params.id);
     if (!bootcamps) {
         return res.status(400).send({ success: false, data: null });
     }
-    res.status(200).send({ success: true, message: "bootcamps is deleted" });
+
+    await Course.deleteMany({ bootcamp: req.params.id });
+    await Bootcamp.deleteOne({ _id: req.params.id }); 
+
+
+    res.status(200).send({ success: true, message: "bootcamps is deleted with courses" });
 
 })
 
