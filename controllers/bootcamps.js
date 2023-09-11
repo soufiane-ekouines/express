@@ -113,6 +113,7 @@ export const deletebootcamp = asyncHandler(async (req, res, next) => {
     }
 
     await Course.deleteMany({ bootcamp: req.params.id });
+    
     await Bootcamp.deleteOne({ _id: req.params.id }); 
 
 

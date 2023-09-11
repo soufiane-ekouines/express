@@ -3,7 +3,7 @@ import { register } from '../controllers/users.js';
 
 const router = Router({mergeParams:true});
 
-router.route('/').get(register);
+router.route('/register').post(register);
 
 
 
