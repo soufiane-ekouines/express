@@ -97,7 +97,7 @@ export const updatebootcamp = asyncHandler(async (req, res, next) => {
     if (!bootcamps) {
         return res.status(400).send({ success: false, data: null });
     }
-    res.status(200).send({ success: true, data: bootcamps });
+    res.status(200).send({ success: true, data: bootcamps, by:req.user.name });
 
 })
 
