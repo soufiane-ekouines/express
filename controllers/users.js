@@ -14,8 +14,8 @@ export const register = asyncHandler(async (req, res, next) => {
     });
 
     // create token
-    const token = user.getsignedJwtToken();
-    res.status(200).json({ success: true, token: token })
+    sendTokenResponse(user, 200, res);
+
 })
 
 
@@ -36,12 +36,35 @@ export const Login = asyncHandler(async (req, res, next) => {
     }
     // check if password match 
     const ismatch = await user.matchpassword(password);
-    console.log('value',user.matchpassword(password));
 
     if (!ismatch) {
         return res.status(401).json({ success: false, message: "the password not correct" })
     }
     // create token
-    const token = user.getsignedJwtToken();
-    res.status(200).json({ success: true, token: token })
+    sendTokenResponse(user, 200, res);
 })
+
+// get token from model, and create cookie and send response
+
+export const sendTokenResponse = (user, statusCode, res) => {
+    // create token
+    const token = user.getsignedJwtToken();
+
+    const options = {
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+    };
+    if (process.env.NODE_ENV === 'production') {
+        options.secure = true;
+    }
+    res
+        .status(statusCode)
+        .cookie('token', token, options)
+        .json({
+            success: true,
+            token: token
+        })
+
+}

@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import { connectDB } from './config/db.js';
 import colors from 'colors'
 import { errorHandler } from './middleware/error.js';
+import cookieParser from 'cookie-parser';
 
 //load env vars
 config({ path: './config/config.env' });
@@ -23,6 +24,8 @@ const app = express();
 //body parser
 app.use(express.json());    
 
+//cookie parser
+app.use(cookieParser())
 
 // dev loggin middleware
 if(process.env.NODE_ENV=="development")
